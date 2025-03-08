@@ -7,18 +7,10 @@ const index = () => {
   const router = useRouter();
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(auth)/welcome");
+      router.push("/Screens/OnBoard");
     }, 2000);
   }, []);
-  return (
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/images/splashImage.png")}
-        style={styles.logo}
-        resizeMode="contain"
-      />
-    </View>
-  );
+  return <View style={styles.container}></View>;
 };
 
 export default index;

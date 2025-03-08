@@ -1,10 +1,12 @@
 import {
   Dimensions,
+  KeyboardAvoidingView,
   Platform,
   StatusBar,
   StyleSheet,
   Text,
   View,
+  ScrollView,
 } from "react-native";
 import React from "react";
 
@@ -14,7 +16,7 @@ const { height } = Dimensions.get("window");
 const ScreenWrapper = ({ style, children }: ScreenWrapperProps) => {
   let paddingTop = Platform.OS === "ios" ? height * 0.05 : 50;
   return (
-    <View
+    <KeyboardAvoidingView
       style={[
         {
           paddingTop,
@@ -23,10 +25,18 @@ const ScreenWrapper = ({ style, children }: ScreenWrapperProps) => {
         },
         style,
       ]}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-      <StatusBar barStyle={"light-content"} />
-      {children}
-    </View>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 20 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <StatusBar barStyle={"light-content"} />
+        {children}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

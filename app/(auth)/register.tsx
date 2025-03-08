@@ -31,6 +31,8 @@ const Register = () => {
     console.log("register result :", res);
     if (!res.success) {
       Alert.alert("Sign up", res.msg);
+    } else {
+      router.navigate("/(auth)/login");
     }
     setIsLoading(false);
   };

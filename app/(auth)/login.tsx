@@ -1,4 +1,11 @@
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useRef, useState } from "react";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typo from "@/components/Typo";
@@ -9,18 +16,56 @@ import Input from "@/components/input";
 import * as Icons from "phosphor-react-native";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/config/firebase";
 const Login = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const [isLoading, setIsLoading] = useState(false);
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!emailRef.current || !passwordRef.current) {
       Alert.alert("Please fill all fields");
       return;
     }
-    console.log(emailRef.current, passwordRef.current);
+
     setIsLoading(true);
-    console.log("loading");
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        emailRef.current,
+        passwordRef.current
+      );
+
+      console.log("User logged in:", userCredential.user.uid);
+
+      // Navigate to main app after successful login
+      router.replace("/HomeScreen/BottomTab"); // Update this path based on your app structure
+    } catch (error) {
+      console.error("Login error:", error);
+
+      // Display user-friendly error message
+      let errorMessage = "Failed to login. Please try again.";
+
+      if (error === "auth/user-not-found") {
+        errorMessage = "No account exists with this email.";
+      } else if (error === "auth/wrong-password") {
+        errorMessage = "Invalid password.";
+      } else if (error === "auth/invalid-email") {
+        errorMessage = "Invalid email address.";
+      } else if (error === "auth/invalid-credential") {
+        errorMessage = "Invalid email or password.";
+      } else if (error === "auth/api-key-not-valid") {
+        errorMessage =
+          "Application error: Invalid API key. Please contact support.";
+      } else if (error === "auth/network-request-failed") {
+        errorMessage = "Network error. Please check your internet connection.";
+      }
+
+      Alert.alert("Login Failed", errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
   const router = useRouter();
   return (
@@ -36,6 +81,7 @@ const Login = () => {
           </Typo>
         </View>
         {/* form */}
+
         <View style={styles.form}>
           <Typo size={16} color={colors.textLighter}>
             Login
@@ -72,6 +118,7 @@ const Login = () => {
             </Typo>
           </Button>
         </View>
+
         {/* footer */}
 
         <View style={styles.footer}>

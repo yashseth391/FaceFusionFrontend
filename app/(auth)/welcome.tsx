@@ -45,14 +45,14 @@ const Home = () => {
         style={styles.content}
         entering={FadeInDown.duration(3000)}
       >
-        <Text style={styles.contentText}>Personal Budget Planner</Text>
+        <Text style={styles.contentText}>Photo Manager </Text>
         <Text style={styles.subContentText}>
-          Stay on Track ,Event by Event :Your Personal Budget Plan
+          Stay on Track ,Event by Event by managing your photos
         </Text>
 
         <Button onPress={() => router.push("/(auth)/register")}>
           <Typo color={colors.neutral900} fontWeight={"600"}>
-            Get Started
+            Sign Up
           </Typo>
         </Button>
         <Text style={styles.condition}>
